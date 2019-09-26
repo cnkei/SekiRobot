@@ -9,9 +9,8 @@ namespace CnKei.SekiRobot.Data {
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<ChatMember> ChatMembers { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-            optionsBuilder.UseInMemoryDatabase(databaseName: "seki_robot");
-        }
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+            => options.UseSqlite("Data Source=seki_robot.db");
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             modelBuilder.Entity<ChatMember>().HasKey(cm => new { cm.ChatId, cm.UserId });

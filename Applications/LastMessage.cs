@@ -14,7 +14,7 @@ namespace CnKei.SekiRobot.Applications {
         TelegramBotClient bot;
         ContactContext db;
 
-        public LastMessage(TelegramBotClient bot, string connectionString) {
+        public LastMessage(TelegramBotClient bot) {
             this.bot = bot;
             db = new ContactContext();
         }

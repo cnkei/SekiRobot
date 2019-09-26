@@ -21,7 +21,7 @@ namespace CnKei.SekiRobot {
             Console.WriteLine(
                 $"I am user {me.Id} and my name is {me.FirstName}."
             );
-            var lastMessage = new LastMessage(bot, "");
+            var lastMessage = new LastMessage(bot);
 
             bot.OnMessage += lastMessage.OnMessage;
             bot.StartReceiving();
