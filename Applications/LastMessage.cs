@@ -30,6 +30,9 @@ namespace CnKei.SekiRobot.Applications {
             if (contact == null) {
                 db.Contacts.Add(new Contact{Id=user.Id, Username=user.Username, FirstName=user.FirstName, LastName=user.LastName, LastSeen=e.Message.Date});
             } else {
+                contact.Username = user.Username;
+                contact.FirstName = user.FirstName;
+                contact.LastName = user.LastName;
                 contact.LastSeen = e.Message.Date;
             }
             if (chat.Type == ChatType.Group || chat.Type == ChatType.Supergroup) {
@@ -44,7 +47,7 @@ namespace CnKei.SekiRobot.Applications {
                 var members = (from cm in db.ChatMembers
                                join c in db.Contacts
                                on cm.UserId equals c.Id
-                               where cm.ChatId == chat.Id
+                               where cm.ChatId == chat.Id && c.Id != user.Id
                                orderby c.LastSeen
                                select c).ToList();
                 var sb = new StringBuilder();
@@ -52,6 +55,10 @@ namespace CnKei.SekiRobot.Applications {
                     sb.AppendLine($"{c.FirstName}{c.LastName}在{e.Message.Date.Subtract(c.LastSeen)}前出现");
                 }
                 if (sb.Length == 0) {
+                    await bot.SendTextMessageAsync(
+                        chatId: e.Message.Chat,
+                        text:   "这里只剩你了"
+                    );
                     return;
                 }
                 await bot.SendTextMessageAsync(
