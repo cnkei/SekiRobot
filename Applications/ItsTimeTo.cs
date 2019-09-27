@@ -3,6 +3,7 @@ using System.Text;
 
 using Telegram.Bot;
 using Telegram.Bot.Args;
+using Telegram.Bot.Exceptions;
 
 namespace CnKei.SekiRobot.Applications {
 
@@ -16,7 +17,7 @@ namespace CnKei.SekiRobot.Applications {
 
         public async void OnMessage(object sender, MessageEventArgs e) {
             var user = e.Message.From;
-            if (!e.Message.Text.StartsWith("该")) {
+            if (e.Message.Text == null || !e.Message.Text.StartsWith("该")) {
                 return;
             }
             var sb = new StringBuilder();
@@ -30,11 +31,14 @@ namespace CnKei.SekiRobot.Applications {
                 sb.Append(c);
             }
             var thingToDo = sb.ToString();
-            await bot.SendTextMessageAsync(
-                chatId: e.Message.Chat,
-                replyToMessageId: e.Message.MessageId,
-                text:   $"{thingToDo}啊当然{thingToDo}"
-            );
+            try {
+                await bot.SendTextMessageAsync(
+                    chatId: e.Message.Chat,
+                    replyToMessageId: e.Message.MessageId,
+                    text:   $"{thingToDo}啊当然{thingToDo}"
+                );
+            } catch (ApiRequestException) {
+            }
         }
     }
 }
