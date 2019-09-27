@@ -22,9 +22,6 @@ namespace CnKei.SekiRobot.Applications {
         public async void OnMessage(object sender, MessageEventArgs e) {
             var user = e.Message.From;
             var chat = e.Message.Chat;
-            if (user.IsBot) {
-                return;
-            }
             // var contact = db.Contacts.SingleOrDefault(c => c.Id == user.Id);
             var contact = (from c in db.Contacts where c.Id == user.Id select c).SingleOrDefault<Contact>();
             if (contact == null) {

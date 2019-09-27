@@ -22,8 +22,10 @@ namespace CnKei.SekiRobot {
                 $"I am user {me.Id} and my name is {me.FirstName}."
             );
             var lastMessage = new LastMessage(bot);
+            var itsTimeTo = new ItsTimeTo(bot);
 
             bot.OnMessage += lastMessage.OnMessage;
+            bot.OnMessage += itsTimeTo.OnMessage;
             bot.StartReceiving();
             Thread.Sleep(int.MaxValue);
         }
