@@ -1,3 +1,5 @@
+using System.Linq;
+using System.Text;
 
 using Telegram.Bot;
 using Telegram.Bot.Args;
@@ -17,7 +19,17 @@ namespace CnKei.SekiRobot.Applications {
             if (!e.Message.Text.StartsWith("该")) {
                 return;
             }
-            var thingToDo = e.Message.Text[1];
+            var sb = new StringBuilder();
+            foreach (var c in e.Message.Text.Skip(1)) {
+                if (c > sbyte.MaxValue) {
+                    if (sb.Length == 0) {
+                        sb.Append(c);
+                    }
+                    break;
+                }
+                sb.Append(c);
+            }
+            var thingToDo = sb.ToString();
             await bot.SendTextMessageAsync(
                 chatId: e.Message.Chat,
                 replyToMessageId: e.Message.MessageId,
